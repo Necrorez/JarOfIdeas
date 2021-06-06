@@ -1,0 +1,113 @@
+    {% extends 'main/base.html' %}
+    {% block styles %}
+    .mydiv div:hover{background-color:gray;}
+    .header div:hover{background-color:gray;}
+    {% endblock  %}
+    {% include 'main/style.css' %}
+
+    {% block content %}
+    {% include 'main/navbar.html' %}
+
+    {% comment %} Create new post {% endcomment %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+      </div>
+    </div>
+    {% comment %} <div onclick='location.href="{% url 'new' test.region test.category %}";' style=" cursor: pointer;">
+      <h2>Create new post</h2>
+    </div> {% endcomment %}
+    {% comment %} Listing {% endcomment %}
+    <div class="container pt-5">
+      <div class="row ">
+        <h2 class="text-center">Country: {{test.region}}</h2>
+
+        {% if request.user.is_authenticated %}
+        <div class="col-9 ">
+          <h2>Topic: {{test.category}}</h2>
+        </div>
+
+        <div class="col mydiv text-center">
+          <div class="create-post" style=" cursor: pointer;">
+            <h4>Create new post</h4>
+          </div>
+        </div>
+        {% else %}
+        <div class="col ">
+          <h2>Topic: {{test.category}}</h2>
+        </div>
+
+        {% endif %}
+
+        <hr>
+        {% for p  in movies %}
+
+
+        <div class="w-100 mydiv">
+          <div class="col ">
+            <div onclick='location.href="{% url 'postView' p.id %}";' style=" cursor: pointer;">
+              <h4 class="thumbnail">By:
+                {% if p.user.is_staff %}
+                <i class="fa fa-gear" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                {% elif p.user.is_investor %}
+                <i class="fa fa-money" data-toggle="tooltip" data-placement="top" title="Investor"></i>
+                {% elif p.user %}
+                <i class="fa fa-child" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                {% else %}
+                <i class="fa fa-user-secret" data-toggle="tooltip" data-placement="top" title="Anonymous"></i>
+                {% endif %}
+                {{p.user.email}} </h4>
+              <h4 class="thumbnail">{{p.title}} </h4>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    {% comment %} Pagination {% endcomment %}
+    <div class="container p-4">
+      <div class="pagination justify-content-center">
+        <span class="step-links">
+          {% if movies.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ movies.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ movies.number }} of {{ movies.paginator.num_pages }}
+          </span>
+
+          {% if movies.has_next %}
+          <a href="?page={{ movies.next_page_number }}">next</a>
+          <a href="?page={{ movies.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+
+
+    {% endblock  %}
+
+    {% block scripts %}
+    {% load static %}
+    <script src="{% static '/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+
+        $(".create-post").modalForm({
+          formURL: "{% url 'newPost' test.region test.category %}"
+        });
+
+      });
+
+    </script>
+
+    {% endblock  %}

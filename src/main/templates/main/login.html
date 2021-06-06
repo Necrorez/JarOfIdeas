@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% include 'main/navbar.html' %}
+<div class='container-fluid' style="padding: 20px 20px">
+    <div class="text-center">
+        <div class='jumbotron align-items-center '>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for field in login_form %}
+                <p>
+
+                    {{field.label_tag}}
+                    <br>
+                    {{field}}
+                </p>
+
+                {% if field.help_text %}
+                <small style="color:grey;">{{field.help_text}}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                <p style="color:red;">{{error}}</p>
+
+                {% endfor %}
+
+                {% if login_form.non_field_error %}
+                <div style="background:grey;">
+                    <p style="color:white;">
+                    {{login_form.non_field_error}}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% endfor %}
+
+
+
+                <br>
+                <button type="submit" class="btn btn-dark">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock  %}

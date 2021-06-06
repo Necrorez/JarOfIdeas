@@ -1,0 +1,145 @@
+{% extends 'main/base.html' %}
+{% block style %}
+{% include 'main/poststyles.html' %}
+{% endblock  %}
+
+{% block content %}
+{% include 'main/navbar.html' %}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="pt-5 jumbotron ">
+
+    <div class="container">
+        <div class="row">
+            <div class="col bg-dark text-white text-center">
+                <h1>
+                    {{posts.title}}
+
+                </h1>
+            </div>
+        </div>
+        <div class="row d-block d-sm-none border border-dark text-center">
+            <p class="example"> By: {{posts.user_name}} </p>
+            <p class="example"> {{auther.email}}</p>
+            <p class="example">{{posts.date_created}}</p>
+
+            {% if  posts.is_funded  %}
+            <i class="fa fa-check"></i>
+            {% endif %}
+            {% if is_valid %}
+            <div class="pt-2 pb-2 text-center">
+                <button class="delete-post btn btn-danger" type="button" name="button">Delete Post</button>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-2 d-none d-sm-block container-fluid card pt-2 border border-dark">
+                <p class="example"> By: {{posts.user}}</p>
+                <p class="example"> {{auther.email}}</p>
+                <p class="example">{{posts.date_created}}</p>
+                {% if  posts.is_funded  %}
+                <i class="fa fa-check "></i>
+                {% endif %}
+                {% if is_valid %}
+                <div class="pt-2 pb-2 text-center">
+                    <button class="delete-post  btn btn-danger" type="button" name="button">Delete Post</button>
+
+                </div>
+                {% endif %}
+            </div>
+            <div class="col container-fluid card border border-dark  ">
+                <div class="pt-2 ">
+                    <p class="example"> {{posts.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if request.user.is_investor and not posts.is_funded and not posts.user.is_staff and not posts.user.is_investor %}
+<div class="pt-2 jumbotron ">
+    <div class="container">
+        <div class="row">
+            <button class=" fund-post btn btn-success" type="button" name="button">Fund</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="pt-2 jumbotron ">
+    <div class="container">
+        <div class="row">
+            <button class="
+        {% if request.user.is_authenticated %} add-comment-logged {% else %} add-comment {% endif %}
+
+              btn btn-dark" type="button" name="button">Add Comment</button>
+        </div>
+    </div>
+</div>
+
+{% include 'main/commentView.html' %}
+
+{% endblock  %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static '/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static '/js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".delete-post").modalForm({
+            formURL: "{% url 'deletePost' posts.id %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".fund-post").modalForm({
+            formURL: "{% url 'fundPost' posts.id %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".add-comment-logged").modalForm({
+            formURL: "{% url 'addCommentLogged' posts.id %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".add-comment").modalForm({
+            formURL: "{% url 'addCommentNotLogged' posts.id %}"
+        });
+
+    });
+   
+    $(document).ready(function () {
+      $(".add-reply-logged").each(function () {
+          $(this).modalForm({formURL: $(this).data('form-url')});
+      });
+    });
+    $(document).ready(function () {
+      $(".add-reply").each(function () {
+          $(this).modalForm({formURL: $(this).data('form-url')});
+      });
+    });
+    $(document).ready(function () {
+      $(".delete-comment").each(function () {
+          $(this).modalForm({formURL: $(this).data('form-url')});
+      });
+    });
+    $(document).ready(function () {
+      $(".delete-reply").each(function () {
+          $(this).modalForm({formURL: $(this).data('form-url')});
+      });
+    });
+
+</script>
+
+{% endblock  %}

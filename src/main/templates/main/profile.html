@@ -1,0 +1,97 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+{% include 'main/navbar.html' %}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<div class="container p-5">
+    <h2 class="text-center">Email: <small> {{user.email}} </small></h2>
+    <h2 class="text-center">User Name: <small> {{user.user_name}} </small></h2>
+    <h2 class="text-center">First Name: <small> {{user.first_name}} </small></h2>
+    <h2 class="text-center">Last Name: <small> {{user.last_name}} </small></h2>
+    <h2 class="text-center">Start Date: <small> {{user.start_date}} </small></h2>
+    <h2 class="text-center">Account type:
+        <small>
+            {% if user.is_staff %}
+            Staff
+            {% elif user.is_investor %}
+            Investor
+            {% else %}
+            General user
+            {% endif %}
+        </small></h2>
+    {% if user.is_investor %}
+    <h2 class="text-center">Company name: <small> {{user.company_name}} </small></h2>
+    <h2 class="text-center">Company code: <small> {{user.company_code}} </small></h2>
+    <h2 class="text-center">Company site: <small> {{user.company_site}} </small></h2>
+
+    {% endif %}
+    <div class="pt-2 pb-2 text-center">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto pt-2">
+                <button class="update-profile btn btn-success" type="button" name="button">Change personal information</button>
+            </div>
+            <div class="col-md-auto pt-2">
+                <button class="update-password btn btn-warning" type="button" name="button">Change password</button>
+            </div>
+            <div class="col-md-auto pt-2">
+                <button class="delete-account btn btn-danger" type="button" name="button">Delete Account</button>
+            </div>
+            {% if user.is_investor %}
+            <div class="col-md-auto pt-2">
+                <button class="update-company btn btn-success" type="button" name="button">Change company information</button>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static '/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static '/js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".update-profile").modalForm({
+            formURL: "{% url 'updateProfile' user.id  %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".update-company").modalForm({
+            formURL: "{% url 'updateCompany' user.id  %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".update-password").modalForm({
+            formURL: "{% url 'changePassword'  %}"
+        });
+
+    });
+    $(document).ready(function () {
+
+        $(".delete-account").modalForm({
+            formURL: "{% url 'deleteAccount' %}"
+        });
+
+    });
+
+</script>
+
+{% endblock  %}

@@ -1,0 +1,71 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+{% include 'main/navbar.html' %}
+{% if context %}
+{% for entry in context %}
+<div class="container pt-5">
+    <div class="row card bg-dark text-white">
+        <h1 class="text-center"> {{entry.investor.company_name}} </h1>
+
+    </div>
+
+    <div class="row">
+        <div class="col-2  container-fluid  pt-2 border border-dark">
+            <a href="{% url 'postView' entry.post.id %}" target="_blank">
+                <p class="example"> On: {{entry.post.title}} </p>
+            </a>
+        </div>
+        <div class="col  container-fluid  pt-2 border border-dark">
+            <p class="example"> {{entry.comment}} </p>
+        </div>
+    </div>
+    <div class="row border border-dark">
+        <h1 class="example text-center">Company information:</h1>
+    </div>
+    <div class="row ">
+        <div class="col-4 border border-dark">
+            <h2 class="example text-center">Company email:</h1>
+        </div>
+        <div class="col border border-dark">
+            <h2 class="example text-center">{{entry.investor.email}}</h1>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-4 border border-dark">
+            <h2 class="example text-center">Company name:</h1>
+        </div>
+        <div class="col border border-dark">
+            <h2 class="example text-center">{{entry.investor.company_name}}</h1>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-4 border border-dark">
+            <h2 class="example text-center">Company code:</h1>
+        </div>
+        <div class="col border border-dark">
+            <h2 class="example text-center">{{entry.investor.company_code}}</h1>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-4 border border-dark">
+            <h2 class="example text-center">Company site:</h1>
+        </div>
+        <div class="col border border-dark">
+            <a href="{{entry.investor.company_site}}" target="_blank">
+                <h2 class="example text-center">{{entry.investor.company_name}}</h1>
+
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="container pt-5">
+<h1 class="text-center"> Seems like you don't have any messages </h1>
+</div>
+{% endif %}
+
+
+{% endblock %}

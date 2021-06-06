@@ -1,0 +1,10 @@
+{
+    "html.format.endWithNewline": true,
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "emmet.extensionsPath": [
+        ""
+    ],
+    "python.pythonPath": "/usr/bin/python3"
+}

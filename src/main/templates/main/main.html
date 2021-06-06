@@ -1,0 +1,98 @@
+{% extends 'main/base.html' %}
+
+{% block styles %}
+.mydiv div:hover{background-color:gray;}
+.header div:hover{background-color:gray;}
+
+{% include 'main/style.css' %}
+
+{% endblock  %}
+
+{% block content %}
+{% include 'main/navbar.html' %}
+
+<div class="text-center">
+  <div class="jumbotron align-items-center">
+    <div class="container">
+      {% if selected %}
+
+      <h2>Change country:</h2>
+      <form name="country_select" action="" method="post">
+        {% csrf_token %}
+        <Select onchange="country_select.submit()" name="name" class="form-select">
+          <option value="-1">{{selected.name}}</option>
+          {% for country in countries %}
+          <option value="{{ country.code }}">{{ country.name }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <br> <br> <br>
+      <div class="jumbotron align-items-center">
+        <H1>Categories</H1>
+        {% for i,j in posts.items %}
+        <div class="text-white bg-dark" onclick='location.href="{% url 'category_view' selected.name i%}";'
+          style="cursor: pointer;">
+          <h2>{{i}} </h2>
+        </div>
+
+        {% if j %}
+        {% for k  in j %}
+        <div class="text-white bg-dark mydiv" onclick='location.href="{% url 'postView' k.id%}";'
+          style="cursor: pointer;">
+          <div class="jumbotron align-items-left">
+            <div class="justify-content-around text-dark bg-white">
+              <h3>
+                 {{k.title}}
+              </h3>
+              <p class="text-truncate">
+                {{k.description}}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div class="container">
+        <blockquote class="blockquote text-center">
+          <h1>Welcome to Jar of Ideas</h1>
+          <p>
+            This website is for people who like collaborating and are looking for funding.
+            We really hope that everyones' dreams of becoming a unicorn startup company.
+            If you wish to begin please <b>Select</b> a
+            desired country of interest and begging your journey
+          </p>
+        </blockquote>
+        <h2>Select a country</h2>
+        <form name="country_select" action="" method="post">
+          {% csrf_token %}
+          <Select onchange="country_select.submit()" name="name" class="form-select">
+            <option value="-1">Select</option>
+
+            {% for country in countries %}
+            <option value="{{ country.code }}">{{ country.name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+      {% comment %} {% endcomment %}
+
+
+
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock  %}
+
+{% block scripts %}
+
+{% endblock  %}

@@ -1,0 +1,113 @@
+{% extends 'main/base.html' %}
+{% block styles %}
+.reveal-if-active {
+opacity: 0;
+max-height: 0;
+overflow: hidden;
+font-size: 16px;
+transform: scale(0.8);
+transition: 0.5s;
+}
+.reveal-if-active label {
+display: block;
+margin: 0 0 3px 0;
+}
+
+input[type=radio]:checked ~ .reveal-if-active, input[type=checkbox]:checked ~ .reveal-if-active {
+opacity: 1;
+max-height: 200px;
+padding: 10px 20px;
+transform: scale(1);
+overflow: visible;
+}
+
+{% endblock  %}
+{% block content %}
+{% include 'main/navbar.html' %}
+<div class='container-fluid' style="padding: 20px 20px">
+    <div class="text-center">
+        <div class='jumbotron align-items-center '>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for field in registration_form %}
+                {% if field == registration_form.is_investor or field == registration_form.company_name or field == registration_form.company_code or field == registration_form.company_site %}
+                {% else %}
+                <p>
+
+                    {{field.label_tag}}
+                    <br>
+                    {{field}}
+                </p>
+
+                {% if field.help_text %}
+                <small style="color:grey;">{{field.help_text}}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                <p style="color:red;">{{error}}</p>
+
+                {% endfor %}
+                {% endif %}
+
+                {% endfor %}
+                <br><br>
+                <h4>Are you an investor?</h4>
+                <div>
+                    {{registration_form.is_investor}}
+                    <label for="choice-dollar">Yes.</label>
+
+                    <div class="reveal-if-active">
+                        <h4>Fill out the following information</h4>
+                        {{ registration_form.company_name.label_tag }}
+                        {{ registration_form.company_name }}
+                        {{ registration_form.company_code.label_tag }}
+                        {{ registration_form.company_code }}
+                        {{ registration_form.company_site.label_tag }}
+                        {{ registration_form.company_site }}
+                    </div>
+                </div>
+
+
+                <br>
+                <button type="submit" class="btn btn-dark">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock  %}
+
+{% block scripts %}
+<script>
+    var FormStuff = {
+
+        init: function () {
+            this.applyConditionalRequired();
+            this.bindUIActions();
+        },
+
+        bindUIActions: function () {
+            $("input[type='radio'], input[type='checkbox']").on("change", this.applyConditionalRequired);
+        },
+
+        applyConditionalRequired: function () {
+
+            $(".require-if-active").each(function () {
+                var el = $(this);
+                if ($(el.data("require-pair")).is(":checked")) {
+                    el.prop("required", true);
+                } else {
+                    el.prop("required", false);
+                }
+            });
+
+        }
+
+    };
+
+    FormStuff.init();
+
+</script>
+
+{% endblock  %}

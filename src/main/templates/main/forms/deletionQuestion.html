@@ -1,0 +1,13 @@
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h5 class="modal-title">Do you really want to delete this post?</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-footer justify-content-center">
+    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </div>
+
+</form>

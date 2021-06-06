@@ -1,0 +1,100 @@
+{% comment %} {% for i,k in comments.items %} {% endcomment %}
+{% for i,j in comments.items %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="card p-3">
+            <div class="col">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="user d-flex flex-row align-items-top">
+                        <div class="col-4 baseline-top">
+                            {% if j.comment.user.is_staff %}
+                            <i class="fa fa-gear" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                            {% elif j.comment.user.is_investor %}
+                            <i class="fa fa-money" data-toggle="tooltip" data-placement="top" title="Investor"></i>
+                            {% elif j.comment.user %}
+                            <i class="fa fa-child" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                            {% else %}
+                            <i class="fa fa-user-secret" data-toggle="tooltip" data-placement="top"
+                                title="Anonymous"></i>
+                            {% endif %}
+                        </div>
+                        <p class="font-weight-bold text-primary"> {% if j.comment.user %} {{j.comment.user.email}}
+                            {% else %} {{j.comment.anonUser}} {% endif %} </p>
+
+                    </div>
+                    <small>{{j.comment.date_created|date:'Y-m-d H:i'}}</small>
+                </div>
+                <div class="row">
+                    <p class="font-weight-bold">{{j.comment.comment}}</p>
+
+                </div>
+                <div class="action d-flex justify-content-between mt-2 align-items-center">
+                    <div class="reply px-4">
+                        {% if request.user.id == j.comment.user.id and request.user.is_authenticated or request.user.is_staff  %}
+                        <small class="delete-comment" style=" cursor: pointer;"
+                            data-form-url="{% url  'deleteComment' j.comment.id %}">Remove</small>
+                        <span class="dots"></span>
+                        {% endif %}
+                        <small
+                            class="{% if request.user.is_authenticated %} add-reply-logged {% else %} add-reply {% endif %}"
+                            style=" cursor: pointer;" {% if request.user.is_authenticated %}
+                            data-form-url="{% url  'addReplyLogged' j.comment.id j.comment.post.id %}">
+                            {% else %}
+                            data-form-url="{% url 'addReplyNotLogged' j.comment.id j.comment.post.id %}">
+                            {% endif %}
+                            Reply
+                        </small>
+                        <span class="dots"></span>
+                    </div>
+
+                </div>
+            </div>
+            {% if j.replies %}
+            <div class="card p-3">
+                {% for reply in j.replies %}
+                <div class="col ">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="user d-flex flex-row align-items-top">
+                            <div class="col-4 baseline-top">
+                                {% if reply.user.is_staff %}
+                                <i class="fa fa-gear" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                                {% elif reply.user.is_investor %}
+                                <i class="fa fa-money" data-toggle="tooltip" data-placement="top" title="Investor"></i>
+                                {% elif reply.user %}
+                                <i class="fa fa-child" data-toggle="tooltip" data-placement="top" title="Staff"></i>
+                                {% else %}
+                                <i class="fa fa-user-secret" data-toggle="tooltip" data-placement="top"
+                                    title="Anonymous"></i>
+                                {% endif %}
+                            </div>
+                            <p class="font-weight-bold text-primary"> {% if reply.user %} {{reply.user.email}}
+                                {% else %} {{reply.anonUser}} {% endif %} </p>
+
+                        </div>
+                        <small>{{reply.date_created|date:'Y-m-d H:i'}}</small>
+                    </div>
+                    <div class="row">
+                        <p class="font-weight-bold">{{reply.reply}}</p>
+
+                    </div>
+                    <div class="action d-flex justify-content-between mt-2 align-items-center">
+                        <div class="reply px-4">
+                            {% if request.user.id == reply.user.id and request.user.is_authenticated  or request.user.is_staff %}
+                            <small class="delete-comment" style=" cursor: pointer;"
+                                data-form-url="{% url  'deleteReply' j.comment.post.id reply.id %}">Remove</small>
+                            <span class="dots"></span>
+                            {% endif %}
+                            <span class="dots"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="pb-3 border-bottom"></div>
+
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}

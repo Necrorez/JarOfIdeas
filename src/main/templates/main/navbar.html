@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-xl">
+    <a class="navbar-brand" href="/">Jar of Ideas</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07XL"
+      aria-controls="navbarsExample07XL" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarsExample07XL">
+
+      <ul class="nav navbar-nav">
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle align" href="#" id="navbar-toggler" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="bi bi-view-stacked"></i>
+            {% if request.user.is_authenticated %}
+
+            {{request.user.user_name}}</a>
+
+          <ul class="dropdown-menu" aria-labelledby="navbar-toggler">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            {% if request.user.is_staff %}
+            <li><a class="dropdown-item" href="/categoriesView">Category Edit</a></li>
+            {% endif %}
+            {% if not request.user.is_staff and not request.user.is_investor %}
+            <li><a class="dropdown-item" href="/messages">Messages</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/logout">Log out</a></li>
+
+          </ul>
+          {% else %}
+          Login</a>
+
+          <ul class="dropdown-menu" aria-labelledby="navbar-toggler">
+            <li><a class="dropdown-item" href="/login">Sign in</a></li>
+            <li><a class="dropdown-item" href="/register">Sign up</a></li>
+          </ul>
+
+          {% endif %}
+
+
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

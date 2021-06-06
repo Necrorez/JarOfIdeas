@@ -1,0 +1,31 @@
+div.example {
+background-color: lightgrey;
+padding: 20px;
+}
+
+@media screen and (min-width: 601px) {
+div.example {
+font-size: 80px;
+}
+}
+
+img {
+max-width: 100%
+}
+
+#div-desktop {
+display: none;
+}
+
+@media screen and (min-width: 701px) {
+#div-mobile {
+display: none;
+}
+#div-desktop {
+display: block;
+}
+}
+body {
+    height: 100%
+}
+

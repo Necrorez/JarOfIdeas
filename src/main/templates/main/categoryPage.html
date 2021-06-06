@@ -1,0 +1,77 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+{% include 'main/navbar.html' %}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="container pt-5 ">
+    <center>
+        <button class="create-new-category btn btn-dark text-center" type="button" name="button">Add a new
+            category</button>
+    </center>
+    <div class="row pt-5 text-left ">
+        {% for cat in categories %}
+        <div class="row border border-dark">
+            <div class="col-10 ">
+                <p> {{cat.name}} </p>
+                <div class="w-100 border-top"></div>
+                <p> {{cat.description}} </p>
+            </div>
+            <div class="col pt-2 pb-2">
+                <button class="update-category btn btn-dark text-center" type="button" name="button"
+                    data-form-url="{% url  'updateCategory' cat.id %}">
+                    Update category</button>
+                <div class="w-100 border-left pt-2 pb-2"></div>
+                <button class="delete-category btn btn-dark text-center" type="button" name="button"
+                    data-form-url="{% url  'deleteCategory' cat.id %}">
+                    Delete category</button>
+            </div>
+        </div>
+        <div class="pt-4">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% comment %} <div class="w-100"></div> {% endcomment %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static '/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static '/js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".create-new-category").modalForm({
+            formURL: "{% url 'createNewCategory'  %}"
+        });
+
+    });
+
+    $(document).ready(function () {
+        $(".update-category").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $(".delete-category").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+    });
+
+</script>
+
+{% endblock  %}
